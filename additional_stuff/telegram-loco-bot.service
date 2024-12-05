@@ -1,0 +1,22 @@
+[Unit]
+Description=Telegram Loco Bot Service
+After=network.target mysql.service
+Requires=mysql.service
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/private/TelegramLocoBot
+Environment=PYTHONPATH=/var/www/private/TelegramLocoBot
+Environment=PATH=/var/www/private/TelegramLocoBot/venv/bin:$PATH
+EnvironmentFile=/var/www/private/TelegramLocoBot/.env
+ExecStartPre=/var/www/private/TelegramLocoBot/venv/bin/pip install -r requirements.txt
+ExecStart=/var/www/private/TelegramLocoBot/venv/bin/python bot.py
+Restart=always
+RestartSec=10
+StandardOutput=append:/var/log/telegram-loco-bot.log
+StandardError=append:/var/log/telegram-loco-bot.error.log
+
+[Install]
+WantedBy=multi-user.target
